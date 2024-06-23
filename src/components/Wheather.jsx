@@ -1,18 +1,24 @@
-import {useEffect, useState} from 'react'
-import getUserLocationWithWehther from '../hooks/useWheather';
+import { useEffect, useState } from 'react';
+import getUserLocationWithWeather from '../hooks/useWheather'; // Corrected the import
 import { BsThermometerHalf, BsDropletHalf, BsMap } from 'react-icons/bs';
-const Wheather = () => {
-    const [weatherData, setWeatherData] = useState({});
-    useEffect(() => {
-        const getWeatherData = async () => {
-            setWeatherData(await getUserLocationWithWehther());
-          }
-            getWeatherData()
-          console.log(weatherData)
-          const iconUrl = `http://openweathermap.org/img/wn/${weatherData?.weather[0]?.icon}@2x.png`;
-          document.getElementById("wicon").src = iconUrl;
-    },[])
-    
+
+const Weather = () => {
+  const [weatherData, setWeatherData] = useState(null);
+
+  useEffect(() => {
+    const getWeatherData = async () => {
+      const data = await getUserLocationWithWeather();
+      setWeatherData(data);
+    };
+    getWeatherData();
+  }, []);
+
+  if (!weatherData) {
+    return <div>Loading...</div>;
+  }
+
+  const iconUrl = `http://openweathermap.org/img/wn/${weatherData?.weather[0]?.icon || 'haze'}@2x.png`;
+
   return (
     <div>
       <div className="bg-white dark:bg-gray-800 shadow-lg backdrop-blur-lg rounded-lg border border-white/18 p-5 w-96 relative z-10">
@@ -21,12 +27,14 @@ const Wheather = () => {
           Weather App
         </header>
         <section className="weather-part flex flex-col items-center mt-7">
-          <img id="wicon" alt="Weather Icon" className="max-w-[125px] mb-4" />
+          <img id="wicon" src={iconUrl} alt="Weather Icon" className="max-w-[125px] mb-4" />
           <div className="temp flex items-center font-medium text-[72px] text-gray-300 dark:text-white">
-            <span className="numb font-semibold ">{Math.trunc(weatherData?.main?.temp)}</span>
-            <span className="deg text-4xl mt-2 ml-1 ">°C</span>
+            <span className="numb font-semibold">{Math.trunc(weatherData?.main?.temp) || '0'}</span>
+            <span className="deg text-4xl mt-2 ml-1">°C</span>
           </div>
-          <div className="weather text-xl text-center mb-4 text-gray-300">{weatherData?.current?.weather[0]?.description}</div>
+          <div className="weather text-xl text-center mb-4 text-gray-300">
+            {weatherData?.weather[0]?.description}
+          </div>
           <div className="location text-gray-300 dark:text-white flex items-center text-lg text-center mb-7">
             <BsMap className="mr-2 text-2xl" />
             <span>{weatherData?.name}</span>
@@ -35,7 +43,7 @@ const Wheather = () => {
             <div className="column feels flex items-center justify-center w-full py-4">
               <BsThermometerHalf className="text-gray-500 dark:text-gray-300 text-4xl mr-2" />
               <div className="details ml-1 text-gray-300 dark:text-white">
-                <div className="temp  text-lg font-medium mb-1 flex items-center">
+                <div className="temp text-lg font-medium mb-1 flex items-center">
                   <span className="numb-2">{Math.trunc(weatherData?.main?.feels_like)}</span>
                   <span className="deg text-lg">°C</span>
                 </div>
@@ -53,7 +61,7 @@ const Wheather = () => {
         </section>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Wheather
+export default Weather;
