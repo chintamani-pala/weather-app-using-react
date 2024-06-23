@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "tailwindcss/tailwind.css";
 import { BsMoon } from "react-icons/bs";
-import Wheather from "./Wheather.jsx";
+import Wheather from "./Weather.jsx";
 const WeatherCard = () => {
   const [darkMode, setDarkMode] = useState(false);
 
@@ -21,6 +21,7 @@ const WeatherCard = () => {
           <BsMoon />
         </span>
       </div>
+      
       {/* Weather card */}
       <Wheather />
     </div>
