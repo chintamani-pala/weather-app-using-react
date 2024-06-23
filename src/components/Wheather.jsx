@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import getUserLocationWithWeather from '../hooks/useWheather'; // Corrected the import
 import { BsThermometerHalf, BsDropletHalf, BsMap } from 'react-icons/bs';
-
+import Shimmer from './Shimmer';
 const Weather = () => {
   const [weatherData, setWeatherData] = useState(null);
 
@@ -14,7 +14,7 @@ const Weather = () => {
   }, []);
 
   if (!weatherData) {
-    return <div>Loading...</div>;
+    return <Shimmer />;
   }
 
   const iconUrl = `http://openweathermap.org/img/wn/${weatherData?.weather[0]?.icon || 'haze'}@2x.png`;
